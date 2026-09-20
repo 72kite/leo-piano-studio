@@ -92,6 +92,64 @@ short version:
 
 ---
 
+## Screenshots
+
+<table>
+<tr>
+<td width="50%">
+
+**Typing Hub**
+![Typing Hub](demo/screenshots/typing-hub.png)
+
+</td>
+<td width="50%">
+
+**Typing in progress**
+![Typing in progress](demo/screenshots/typing-in-progress.png)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Race Mode — live multiplayer**
+![Race Mode](demo/screenshots/race-active-typing.png)
+
+</td>
+<td width="50%">
+
+**Piano Studio — falling notes**
+![Piano falling notes](demo/screenshots/piano-falling-notes.png)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Piano Studio — Chord Selector**
+![Chord Selector](demo/screenshots/piano-chord-selector.png)
+
+</td>
+<td width="50%">
+
+**Educator Dashboard — Roster**
+![Educator Roster](demo/screenshots/educator-roster.png)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Stats — run history & trend**
+![Stats page](demo/screenshots/stats-page.png)
+
+</td>
+<td width="50%"></td>
+</tr>
+</table>
+
+---
+
 ## Project Structure
 
 ```
