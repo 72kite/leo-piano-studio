@@ -1,0 +1,41 @@
+.virtual-keymap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+  margin: 2rem auto 0;
+  max-width: 32rem;
+  user-select: none;
+}
+.vk-row {
+  display: flex;
+  gap: .3rem;
+  justify-content: center;
+}
+.vk-key {
+  min-width: 1.9rem;
+  height: 1.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  text-transform: uppercase;
+  color: var(--sub);
+  background: var(--surf2);
+  border: .5px solid var(--border2);
+  border-radius: var(--r-sm);
+  transition: color var(--tx-fast), background var(--tx-fast), border-color var(--tx-fast);
+}
+.vk-key.vk-active {
+  color: #111;
+  background: var(--acc);
+  border-color: var(--acc);
+}
+.vk-space {
+  min-width: 12rem;
+}
+
+@media (max-width: 560px) {
+  .virtual-keymap { display: none; } /* too cramped below ~560px to be useful */
+}

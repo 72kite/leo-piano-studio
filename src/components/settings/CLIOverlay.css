@@ -1,0 +1,30 @@
+.cli-backdrop {
+  position:fixed; inset:0; background:rgba(0,0,0,.72);
+  display:flex; align-items:center; justify-content:center;
+  z-index:200; backdrop-filter:blur(4px);
+  animation:fadeIn .15s ease;
+}
+.cli-box {
+  background:var(--surf); border:.5px solid var(--border2); border-radius:var(--r-xl);
+  padding:1.5rem; width:32.5rem; max-width:calc(100vw - 2rem);
+  box-shadow:0 1.5rem 4rem rgba(0,0,0,.6);
+}
+.cli-title { font-family:var(--font-mono); font-size:.625rem; letter-spacing:.14em; text-transform:uppercase; color:var(--sub); margin-bottom:.75rem; }
+.cli-list { max-height:12rem; overflow-y:auto; margin-bottom:.75rem; border:.5px solid var(--border); border-radius:var(--r-md); background:var(--surf2); }
+.cli-item { display:flex; align-items:baseline; gap:.75rem; padding:.5rem .75rem; cursor:pointer; transition:background var(--tx-fast); }
+.cli-item:hover,.cli-hi { background:var(--surf3); }
+.cli-key { font-family:var(--font-mono); font-size:.75rem; color:var(--acc); flex-shrink:0; min-width:8rem; }
+.cli-val { font-family:var(--font-mono); font-size:.6875rem; color:var(--sub); }
+.cli-input {
+  width:100%; background:var(--surf2); border:.5px solid var(--border2); border-radius:var(--r-md);
+  padding:.625rem .875rem; font-family:var(--font-mono); font-size:.8125rem; color:var(--text);
+  outline:none; letter-spacing:.04em; transition:border-color var(--tx-base);
+}
+.cli-input:focus { border-color:var(--acc-ring); }
+.cli-output { font-family:var(--font-mono); font-size:.6875rem; min-height:1.125rem; margin-top:.5rem; }
+.cli-output.ok  { color:var(--acc); }
+.cli-output.err { color:var(--err); }
+.cli-chips { display:flex; flex-wrap:wrap; gap:.375rem; margin-top:.875rem; padding-top:.875rem; border-top:.5px solid var(--border); }
+.cli-chip { font-family:var(--font-mono); font-size:.625rem; color:var(--sub); padding:.25rem .625rem; border:.5px solid var(--border2); border-radius:var(--r-sm); cursor:pointer; letter-spacing:.04em; transition:all var(--tx-fast); background:none; }
+.cli-chip:hover { color:var(--acc); border-color:var(--acc-ring); }
+.chip-sep { display:inline-block; width:.5px; height:.875rem; background:var(--border2); margin:0 .25rem; }

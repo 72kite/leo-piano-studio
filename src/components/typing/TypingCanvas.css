@@ -1,0 +1,77 @@
+.typing-canvas {
+  position: relative;
+  padding: .5rem 0 2rem;
+  cursor: text;
+  outline: none;
+  /* Never grows taller — exactly 3 lines */
+  min-height: calc(var(--typing-lh) * 3 * var(--typing-size, 1.125rem));
+}
+
+.typing-text {
+  font-family: var(--font-mono);
+  font-size: var(--typing-size);
+  line-height: var(--typing-lh);
+  letter-spacing: .04em;
+  user-select: none;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  /* Lock to exactly 3 visible lines — no layout shift */
+  height: calc(var(--typing-lh) * 3em);
+  overflow: hidden;
+  contain: size layout;
+}
+
+/* Character states */
+.ch-pending { color: var(--sub); }
+.ch-ok      { color: var(--text); }
+.ch-err     { color: var(--err); text-decoration: underline; text-decoration-color: rgba(248,113,113,.4); }
+.ch-extra   { color: var(--err); opacity: .7; }
+
+/* Blind mode: suppress error colors */
+.blind-mode .ch-err { color: var(--sub); text-decoration: none; }
+.blind-mode .ch-ok  { color: var(--sub); }
+
+/* Caret variants */
+.caret {
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 1px;
+  animation: blink 1s step-end infinite;
+}
+.caret-line      { width: 2px;   height: 1.15em; background: var(--acc); }
+.caret-block     { width: 1ch;   height: 1.1em;  background: var(--acc); opacity: .45; animation: none; }
+.caret-underline { width: 1ch;   height: 2px;    background: var(--acc); margin-bottom: -.125rem; }
+.caret-off       { display: none; }
+
+/* Quote attribution */
+.quote-attribution {
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  letter-spacing: .06em;
+  color: var(--sub);
+  text-align: right;
+  padding-top: .5rem;
+  padding-right: .25rem;
+  font-style: italic;
+  animation: fadeIn .3s ease;
+}
+
+/* Blur overlay */
+.typing-blur-overlay {
+  position: absolute; inset: 0;
+  background: rgba(var(--bg-rgb, 14,14,16), .6);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  border-radius: var(--r-md);
+  animation: fadeIn .2s ease;
+  z-index: 4;
+}
+.blur-label {
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  letter-spacing: .1em;
+  color: var(--sub);
+  user-select: none;
+}

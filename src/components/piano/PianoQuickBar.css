@@ -1,0 +1,73 @@
+/* ── Slim quick-access bar, sticky right under TopNav ── */
+.piano-quickbar {
+  position: sticky; top: 3.25rem; z-index: 60;
+  width: 100%; box-sizing: border-box;
+  display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+  padding: .5rem 1.5rem;
+  background: rgba(10,10,12,0.55);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+@media (max-width: 48rem) { .piano-quickbar { padding: .5rem .75rem; } }
+
+.qb-group { display: flex; align-items: center; gap: .375rem; }
+.qb-transport { flex: 1; min-width: 9rem; }
+.qb-progress {
+  flex: 1; height: 3px; min-width: 3rem; margin-left: .25rem;
+  background: rgba(255,255,255,.08); border-radius: 2px; overflow: hidden;
+}
+.qb-progress-fill { height: 100%; background: var(--acc); border-radius: 2px; transition: width .05s linear; }
+
+/* ── Liquid glass — the shared style for every switcher/toggle button on
+   the piano page: translucent, blurred, no solid fill when active — just a
+   lighter glass tint plus a soft accent ring instead of a highlighted box. ── */
+.glass-btn {
+  display: flex; align-items: center; justify-content: center; gap: .3125rem;
+  font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .04em;
+  padding: .375rem .75rem; border-radius: 999px;
+  background: rgba(255,255,255,0.045);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+  color: var(--sub);
+  cursor: pointer;
+  transition: background var(--tx-base), border-color var(--tx-base), color var(--tx-base), box-shadow var(--tx-base);
+}
+.glass-btn:hover { background: rgba(255,255,255,0.09); color: var(--text); }
+.glass-btn.active {
+  background: rgba(255,255,255,0.11);
+  border-color: rgba(232,212,77,0.35);
+  color: var(--acc);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 0 0 1px rgba(232,212,77,0.18), 0 3px 12px rgba(232,212,77,0.12);
+}
+.glass-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+.qb-icon-btn { padding: .4375rem; width: 1.875rem; height: 1.875rem; }
+.qb-inst-btn { font-size: .625rem; padding: .3125rem .625rem; }
+
+/* ── Circular quick-access triggers (Metronome / Chord Selector) ── */
+.qb-circle-wrap { position: relative; }
+.qb-circle-btn { width: 2.375rem; height: 2.375rem; border-radius: 50%; padding: 0; }
+
+.qb-popover {
+  display: none;
+  position: absolute; top: calc(100% + .625rem); right: 0; z-index: 70;
+  min-width: 15rem;
+}
+.qb-popover.qb-popover-open { display: block; animation: fadeIn .12s ease; }
+@media (max-width: 26rem) {
+  .qb-popover { right: -3rem; }
+}
+
+/* ── Glass panel — the popover surface itself ── */
+.glass-panel {
+  background: rgba(18,18,22,0.72);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--r-lg);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 1.25rem 3rem rgba(0,0,0,0.5);
+  padding: 1rem;
+}

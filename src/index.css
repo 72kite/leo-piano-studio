@@ -1,0 +1,101 @@
+/* ═══════════════════════════════════════════════════════════
+   Project Leo — global CSS
+   All design tokens. Components use CSS vars only.
+   ═══════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0e0e10;
+  --surf:     #16161a;
+  --surf2:    #1e1e24;
+  --surf3:    #26262e;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.13);
+  --acc:      #e8d44d;
+  --acc-dim:  rgba(232,212,77,0.12);
+  --acc-ring: rgba(232,212,77,0.35);
+  --text:     rgba(255,255,255,0.88);
+  --sub:      rgba(255,255,255,0.38);
+  --hint:     rgba(255,255,255,0.20);
+  --err:      #f87171;
+  --ok:       #4ade80;
+  --blue:     #5b8af5;
+  --purple:   #a78bfa;
+  --bg-rgb:   14,14,16;
+
+  --font-mono: 'Space Mono', monospace;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+
+  --typing-size: clamp(1rem, 1.4vw + 0.5rem, 1.25rem);
+  --typing-lh:   1.875;
+
+  --r-sm: 4px;  --r-md: 8px;  --r-lg: 10px;  --r-xl: 12px;
+  --tx-fast: 80ms cubic-bezier(.4,0,.2,1);
+  --tx-base: 160ms cubic-bezier(.4,0,.2,1);
+  --tx-slow: 280ms cubic-bezier(.4,0,.2,1);
+  --tx-spring: 220ms cubic-bezier(.34,1.56,.64,1);
+}
+
+[data-theme="light"] {
+  --bg:#f5f4f0; --surf:#efefea; --surf2:#e4e3df;
+  --border:rgba(0,0,0,.08); --border2:rgba(0,0,0,.14);
+  --acc:#d97706; --text:#2c2c2a; --sub:#888780; --hint:#b4b2a9;
+  --err:#dc2626; --ok:#16a34a; --bg-rgb:245,244,240;
+}
+[data-theme="sepia"] {
+  --bg:#f5f0e8; --surf:#ede8de; --surf2:#e4ddd3;
+  --border:rgba(0,0,0,.08); --border2:rgba(0,0,0,.12);
+  --acc:#a0522d; --text:#3d2b1f; --sub:#9a7c6e; --hint:#c8b8a8;
+  --err:#b91c1c; --bg-rgb:245,240,232;
+}
+[data-theme="terminal"] {
+  --bg:#0a0a00; --surf:#111100; --surf2:#1a1a00;
+  --border:rgba(0,255,65,.12); --border2:rgba(0,255,65,.2);
+  --acc:#00ff41; --text:#00ff41; --sub:#005516; --hint:#003310;
+  --err:#ff0000; --bg-rgb:10,10,0;
+}
+[data-theme="nord"] {
+  --bg:#2e3440; --surf:#3b4252; --surf2:#434c5e;
+  --border:rgba(255,255,255,.07); --border2:rgba(255,255,255,.12);
+  --acc:#88c0d0; --text:#eceff4; --sub:#616e88; --hint:#4c566a;
+  --err:#bf616a; --ok:#a3be8c; --bg-rgb:46,52,64;
+}
+[data-theme="dracula"] {
+  --bg:#282a36; --surf:#343746; --surf2:#44475a;
+  --border:rgba(255,255,255,.07); --border2:rgba(255,255,255,.12);
+  --acc:#ff79c6; --text:#f8f8f2; --sub:#6272a4; --hint:#44475a;
+  --err:#ff5555; --ok:#50fa7b; --bg-rgb:40,42,54;
+}
+[data-theme="rose-pine"] {
+  --bg:#191724; --surf:#1f1d2e; --surf2:#26233a;
+  --border:rgba(255,255,255,.06); --border2:rgba(255,255,255,.1);
+  --acc:#ebbcba; --text:#e0def4; --sub:#6e6a86; --hint:#26233a;
+  --err:#eb6f92; --ok:#9ccfd8; --bg-rgb:25,23,36;
+}
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  transition: background var(--tx-slow), color var(--tx-slow);
+  will-change: background-color;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surf3); border-radius: 2px; }
+
+:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
+
+@keyframes fadeIn   { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
+@keyframes spin     { to{transform:rotate(360deg)} }
+.spin { animation: spin 1s linear infinite; display: inline-flex; }
+@keyframes blink    { 0%,100%{opacity:1} 50%{opacity:0} }
+@keyframes pulse    { 0%,100%{opacity:1} 50%{opacity:.35} }
+@keyframes slideInR { from{transform:translateX(110%);opacity:0} to{transform:translateX(0);opacity:1} }
+
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; }
+}

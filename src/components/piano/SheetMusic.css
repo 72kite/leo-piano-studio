@@ -1,0 +1,40 @@
+.sheet-music-wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--surf);
+  border: .5px solid var(--border);
+  border-radius: var(--r-md);
+  margin-bottom: .75rem;
+  min-height: 11.25rem; /* matches HEIGHT=180px */
+  display: flex;
+  align-items: center;
+  position: relative;
+  scroll-behavior: smooth;
+}
+
+.sheet-music-svg {
+  display: block;
+  min-width: 100%;
+}
+
+/* Manual file-override button — top-right corner overlay */
+.sheet-override-btn {
+  position: absolute;
+  top: .375rem;
+  right: .5rem;
+  font-family: var(--font-mono);
+  font-size: .5625rem;
+  letter-spacing: .08em;
+  color: var(--hint);
+  background: none;
+  border: .5px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: .1875rem .5rem;
+  cursor: pointer;
+  transition: color var(--tx-base), border-color var(--tx-base);
+  z-index: 2;
+}
+.sheet-override-btn:hover {
+  color: var(--sub);
+  border-color: var(--border2);
+}

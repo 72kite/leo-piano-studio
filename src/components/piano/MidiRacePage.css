@@ -1,0 +1,26 @@
+.midirace-stage {
+  background: #0a0a0a;
+  border-radius: var(--r-lg);
+  padding: 1rem 1.25rem 1.5rem;
+  min-height: 26rem;
+}
+.midirace-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  color: rgba(255,255,255,.6);
+  padding-bottom: .75rem;
+  margin-bottom: .5rem;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.mr-piece-title { color: #e8d44d; font-weight: 700; }
+.mr-live-score { display: flex; align-items: center; gap: .6rem; }
+.mr-hits { color: #4ade80; font-weight: 700; }
+.mr-wrong { color: #f87171; }
+.mr-midi-status { text-transform: uppercase; letter-spacing: .06em; font-size: .65rem; }
+.mr-midi-status.mr-connected { color: #4ade80; }
+.mr-midi-status.mr-fallback  { color: #e8d44d; }
+.mr-midi-status.mr-error     { color: #f87171; }

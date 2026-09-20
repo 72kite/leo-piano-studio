@@ -1,0 +1,6 @@
+.falling-notes-canvas {
+  display: block;
+  position: relative;
+  z-index: 1; /* stack above DotPianoCanvas (absolute, z-index:0) behind it */
+  background: transparent;
+}

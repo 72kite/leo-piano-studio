@@ -1,0 +1,419 @@
+.piano-mode { display: flex; flex-direction: column; gap: 0; animation: fadeIn .2s ease; }
+
+/* Padded, max-width content sections above/below the immersive stage.
+   Keeps the reading-width columns (transport, tracks, metronome…) legible
+   while the stage itself below is allowed to break out full-bleed. */
+.piano-page-inner {
+  width: 100%; max-width: 88rem; margin: 0 auto;
+  padding: 0 1.5rem; box-sizing: border-box;
+  display: flex; flex-direction: column; gap: 1.75rem;
+}
+.piano-page-inner:not(:first-child) { padding-top: 1.75rem; }
+@media (max-width: 48rem) { .piano-page-inner { padding-left: .75rem; padding-right: .75rem; } }
+
+/* ── MIDI Brand Header ── */
+.midi-brand-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .75rem 1.25rem;
+  background: linear-gradient(135deg, #0e0c06 0%, #1a1710 100%);
+  border: .5px solid rgba(232,212,77,.25);
+  border-radius: var(--r-lg);
+  animation: fadeIn .3s ease;
+}
+.midi-brand-logo { display:flex; flex-direction:column; gap:.2rem; }
+.midi-brand-name {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.125rem; font-style: italic; font-weight: 400;
+  color: var(--acc); letter-spacing: .04em;
+}
+.midi-brand-tagline {
+  font-family: var(--font-mono); font-size: .5625rem;
+  letter-spacing: .14em; text-transform: uppercase; color: rgba(232,212,77,.5);
+}
+.midi-brand-device {
+  font-family: var(--font-mono); font-size: .625rem;
+  color: var(--sub); letter-spacing: .06em;
+}
+
+/* ── Black zone — the whole top half of the page (toolbar, sheet music,
+   transport, mic input) down through the falling notes and keys, as one
+   continuous full-bleed black surface with no seam between sections. ── */
+.piano-black-zone {
+  width: 100%; background: #000; padding-top: 1.5rem;
+  display: flex; flex-direction: column;
+}
+
+/* ── Falling notes + full keyboard — same black surface as the section
+   above it (no background/border of its own, just layout + a bottom
+   border where the black zone ends and normal page content resumes) ── */
+.piano-immersive {
+  position: relative; width: 100%;
+  border-bottom: .5px solid var(--border2);
+  padding: 2rem 0 1.5rem;
+  display: flex; flex-direction: column;
+  align-items: stretch; gap: .75rem;
+  overflow: hidden;
+}
+/* Falling notes + keys both stretch to fill this edge-to-edge — no
+   centering, no horizontal scroll, the keyboard IS the full width. */
+.piano-immersive-visual { position: relative; width: 100%; min-height: 220px; }
+.piano-keys-wrap { position: relative; z-index: 1; width: 100%; }
+
+/* ── Fullscreen ── */
+.piano-mode:fullscreen {
+  background: var(--bg); overflow-y: auto;
+}
+.piano-mode:-webkit-full-screen {
+  background: var(--bg); overflow-y: auto;
+}
+/* No TopNav inside the fullscreen element, so the quickbar sticks to the
+   very top instead of leaving room for a header that isn't there. */
+.piano-mode:fullscreen .piano-quickbar,
+.piano-mode:-webkit-full-screen .piano-quickbar {
+  top: 0;
+}
+
+/* ── MIDI status ── */
+.midi-status-line {
+  font-family: var(--font-mono); font-size: .75rem;
+  letter-spacing: .06em; color: var(--sub);
+  text-align: center; transition: color var(--tx-base);
+}
+.midi-status-line.ok   { color: var(--ok); }
+.midi-status-line.warn { color: var(--acc); }
+
+/* ── Piano actions ── */
+.piano-actions { display: flex; gap: .625rem; justify-content: center; }
+.piano-action-btn {
+  display: flex; align-items: center; gap: .375rem;
+  font-family: var(--font-mono); font-size: .75rem;
+  letter-spacing: .06em; padding: .5rem 1.25rem;
+  border-radius: var(--r-sm); border: .5px solid var(--border2);
+  background: none; color: var(--sub); cursor: pointer;
+  transition: all var(--tx-base);
+}
+.piano-action-btn:hover  { color: var(--text); border-color: rgba(255,255,255,.2); }
+.piano-action-btn.primary { background: var(--acc); border-color: var(--acc); color: #111; font-weight: 700; }
+.piano-action-btn.primary:hover { background: #d4c044; }
+
+/* ── Sample credit (CC BY attribution) ── */
+.sample-credit {
+  font-family: var(--font-mono); font-size: .5625rem; letter-spacing: .02em;
+  color: var(--hint); text-align: center;
+}
+
+/* ── Octave controls ── */
+.octave-controls { display:flex; align-items:center; justify-content:center; gap:.75rem; }
+.oct-btn {
+  font-family: var(--font-mono); font-size: .6875rem;
+  padding: .25rem .75rem; border: .5px solid var(--border2);
+  border-radius: var(--r-sm); background: none; color: var(--sub);
+  cursor: pointer; transition: all var(--tx-fast);
+}
+.oct-btn:hover { color: var(--text); }
+.oct-label { font-family: var(--font-mono); font-size: .75rem; color: var(--acc); min-width: 5rem; text-align: center; }
+
+/* ── Composition section ── */
+.comp-section { display: flex; flex-direction: column; gap: .625rem; }
+
+.comp-section-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
+
+/* Notes ↔ MusicXML view toggle */
+.comp-view-toggle {
+  display: flex; gap: .25rem; align-self: flex-start;
+}
+/* Liquid glass — same treatment as the quickbar's .glass-btn: translucent
+   and blurred, with an accent ring instead of a solid highlighted fill for
+   the active state. */
+.comp-view-btn {
+  display: flex; align-items: center; gap: .3125rem;
+  font-family: var(--font-mono); font-size: .5625rem;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--hint);
+  background: rgba(255,255,255,0.045);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+  border-radius: var(--r-sm);
+  padding: .25rem .625rem; cursor: pointer;
+  transition: color var(--tx-base), border-color var(--tx-base), background var(--tx-base), box-shadow var(--tx-base);
+}
+.comp-view-btn:hover { color: var(--sub); background: rgba(255,255,255,0.09); }
+.comp-view-btn.active {
+  color: var(--acc);
+  background: rgba(255,255,255,0.11);
+  border-color: rgba(232,212,77,0.35);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 0 0 1px rgba(232,212,77,0.18), 0 3px 12px rgba(232,212,77,0.12);
+}
+.teach-toggle-btn { color: var(--blue); }
+.teach-toggle-btn.active {
+  color: var(--blue);
+  border-color: rgba(91,138,245,.4);
+  background: rgba(91,138,245,.10);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 0 0 1px rgba(91,138,245,.25), 0 3px 12px rgba(91,138,245,.12);
+}
+.teach-toggle-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+.comp-player  { background: var(--surf); border: .5px solid var(--border); border-radius: var(--r-md); padding: .625rem .875rem; }
+
+/* ── Teaching Mode panel ── */
+.teach-panel {
+  background: var(--surf); border: .5px solid rgba(91,138,245,.3);
+  border-radius: var(--r-md); padding: .75rem .875rem;
+  display: flex; flex-direction: column; gap: .5rem;
+}
+.teach-panel-top { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.teach-panel-label {
+  display: flex; align-items: center; gap: .375rem;
+  font-family: var(--font-mono); font-size: .625rem;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--blue);
+}
+.teach-step-count { font-family: var(--font-mono); font-size: .625rem; color: var(--sub); }
+.teach-progress-wrap { height: 4px; background: var(--surf2); border-radius: 2px; overflow: hidden; }
+.teach-progress-fill { height: 100%; background: var(--blue); border-radius: 2px; transition: width .2s ease; }
+.teach-next-notes { font-family: var(--font-mono); font-size: .8125rem; color: var(--text); }
+.teach-next-notes strong { color: var(--blue); letter-spacing: .04em; }
+.teach-panel-actions { display: flex; gap: .5rem; }
+.teach-done { border-color: rgba(74,222,128,.35); }
+.teach-done-row { display: flex; align-items: center; gap: .5rem; color: var(--ok); }
+.teach-done-text { font-size: .8125rem; color: var(--text); }
+
+/* ── Mic Input panel ── */
+.mic-panel {
+  background: var(--surf); border: .5px solid var(--border);
+  border-radius: var(--r-md); padding: .75rem .875rem;
+  display: flex; flex-direction: column; gap: .625rem;
+}
+.mic-panel-top { display: flex; align-items: center; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
+.mic-panel-label {
+  display: flex; align-items: center; gap: .375rem;
+  font-family: var(--font-mono); font-size: .625rem;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--sub);
+}
+.mic-toggle-btn {
+  display: flex; align-items: center; gap: .375rem;
+  font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .04em;
+  padding: .375rem .75rem; border-radius: var(--r-sm);
+  border: .5px solid var(--border2); background: var(--surf2); color: var(--text);
+  cursor: pointer; transition: all var(--tx-base);
+}
+.mic-toggle-btn:hover { border-color: var(--acc-ring); }
+.mic-toggle-btn.active { background: rgba(248,113,113,.14); border-color: rgba(248,113,113,.4); color: var(--err); }
+.mic-toggle-btn:disabled { opacity: .6; cursor: default; }
+.mic-hint { font-family: var(--font-mono); font-size: .75rem; color: var(--hint); }
+.mic-hint.mic-error { color: var(--err); }
+
+.mic-readout { display: flex; align-items: center; gap: .875rem; }
+.mic-note-name {
+  font-family: var(--font-mono); font-size: 1.375rem; font-weight: 700;
+  min-width: 3rem; color: var(--sub);
+}
+.mic-note-name.in-tune { color: var(--ok); }
+.mic-note-name.flat, .mic-note-name.sharp { color: var(--acc); }
+
+.mic-tuner-track {
+  position: relative; flex: 1; height: 6px; max-width: 14rem;
+  background: var(--surf2); border-radius: 3px; overflow: visible;
+}
+.mic-tuner-zero {
+  position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px;
+  background: var(--border2); transform: translateX(-50%);
+}
+.mic-tuner-needle {
+  position: absolute; top: -3px; width: 4px; height: 12px; border-radius: 2px;
+  background: var(--acc); transform: translateX(-50%); transition: left .08s linear;
+}
+.mic-tuner-needle.in-tune { background: var(--ok); }
+.mic-cents {
+  font-family: var(--font-mono); font-size: .75rem; color: var(--sub); min-width: 2.75rem; text-align: right;
+}
+.mic-cents.in-tune { color: var(--ok); }
+.comp-transport { display: flex; align-items: center; gap: .5rem; }
+.comp-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 1.75rem; height: 1.75rem; border: .5px solid var(--border2);
+  border-radius: var(--r-sm); background: none; color: var(--sub);
+  cursor: pointer; transition: all var(--tx-fast);
+}
+.comp-btn:hover { color: var(--acc); border-color: var(--acc-ring); }
+.comp-btn:disabled { opacity: .3; cursor: not-allowed; }
+.comp-progress-wrap { flex: 1; height: 4px; background: var(--surf2); border-radius: 2px; overflow: hidden; cursor: pointer; }
+.comp-progress-wrap:hover { height: 6px; }
+.comp-progress-fill { height: 100%; background: var(--acc); border-radius: 2px; transition: width .05s linear; }
+.comp-time  { font-family: var(--font-mono); font-size: .625rem; color: var(--sub); white-space: nowrap; }
+.comp-title { font-family: var(--font-mono); font-size: .625rem; letter-spacing: .08em; color: var(--hint); text-align: center; }
+
+/* ── Bottom panel: tracks + (metronome & chord selector) side-by-side ── */
+.piano-bottom-panel { max-width: 40rem; margin: 0 auto; width: 100%; }
+
+/* ── Community Tracks ── */
+.track-list { border-radius: var(--r-lg); background: var(--surf); border: .5px solid var(--border); overflow: hidden; }
+.track-list-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .75rem 1rem .625rem; border-bottom: .5px solid var(--border);
+  font-family: var(--font-mono); font-size: .625rem;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--sub);
+  gap: .5rem;
+}
+.track-head-actions { display: flex; align-items: center; gap: .5rem; }
+.track-upload-btn {
+  display: flex; align-items: center; gap: .25rem;
+  font-family: var(--font-mono); font-size: .625rem;
+  padding: .25rem .625rem; border: .5px solid var(--border2);
+  border-radius: var(--r-sm); background: none; color: var(--acc);
+  cursor: pointer; transition: all var(--tx-fast); letter-spacing: .04em;
+}
+.track-upload-btn:hover { background: var(--acc-dim); border-color: var(--acc-ring); }
+.audio-midi-btn {
+  display: flex; align-items: center; gap: .25rem;
+  font-family: var(--font-mono); font-size: .625rem;
+  padding: .25rem .625rem; border: .5px solid var(--border2);
+  border-radius: var(--r-sm); background: none; color: var(--blue);
+  cursor: pointer; transition: all var(--tx-fast); letter-spacing: .04em;
+}
+.audio-midi-btn:hover  { background: rgba(91,138,245,.1); border-color: rgba(91,138,245,.3); }
+.audio-midi-btn:disabled { opacity: .5; cursor: not-allowed; }
+.track-section-label {
+  padding: .5rem 1rem .25rem;
+  font-family: var(--font-mono); font-size: .5rem;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--hint);
+}
+.track-row {
+  display: flex; align-items: center; gap: .625rem;
+  padding: .625rem 1rem; border-bottom: .5px solid var(--border);
+  transition: background var(--tx-fast);
+}
+.track-row:last-child { border-bottom: none; }
+.track-row:hover, .track-row.track-active { background: var(--surf2); }
+.track-active .track-title { color: var(--acc); }
+.track-play-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 1.5rem; height: 1.5rem; flex-shrink: 0;
+  border: .5px solid var(--border2); border-radius: 50%;
+  background: none; color: var(--sub); cursor: pointer;
+  transition: all var(--tx-fast);
+}
+.track-row:hover .track-play-btn, .track-active .track-play-btn { color: var(--acc); border-color: var(--acc-ring); }
+.track-info { flex: 1; min-width: 0; }
+.track-title { font-size: .8125rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.track-meta  { font-family: var(--font-mono); font-size: .5625rem; color: var(--sub); margin-top: .125rem; }
+.track-vis-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 1.25rem; height: 1.25rem; border: none;
+  background: none; cursor: pointer; transition: color var(--tx-fast);
+}
+.track-vis-btn.vis-pub  { color: var(--ok); }
+.track-vis-btn.vis-priv { color: var(--hint); }
+.track-share-row { padding: .625rem 1rem; border-top: .5px solid var(--border); }
+.track-share-btn {
+  display: flex; align-items: center; gap: .375rem; width: 100%;
+  justify-content: center; padding: .5rem;
+  font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .04em;
+  border: .5px dashed var(--border2); border-radius: var(--r-sm);
+  background: none; color: var(--sub); cursor: pointer;
+  transition: all var(--tx-base);
+}
+.track-share-btn:hover { color: var(--text); border-color: var(--border2); background: var(--surf2); }
+.track-share-btn:disabled { opacity: .4; cursor: not-allowed; }
+.track-share-btn:disabled:hover { background: none; border-color: var(--border2); }
+
+/* ── Metronome ── */
+.metronome {
+  /* Box styling removed — now rendered inside .glass-panel (PianoQuickBar's
+     popover), which already supplies background/border/padding. */
+  display: flex; flex-direction: column; gap: .75rem;
+}
+.metro-title {
+  display: flex; align-items: center; gap: .375rem;
+  font-family: var(--font-mono); font-size: .625rem;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--sub);
+}
+.metro-beats { display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 1.5rem; }
+.metro-dot {
+  width: .5rem; height: .5rem; border-radius: 50%;
+  background: var(--surf3); border: .5px solid var(--border2);
+  transition: background var(--tx-fast), transform var(--tx-fast);
+}
+.metro-dot-down { background: var(--sub); }
+.metro-dot-on {
+  background: var(--acc) !important;
+  transform: scale(1.4);
+  box-shadow: 0 0 6px var(--acc-ring);
+}
+.metro-controls { display: flex; flex-direction: column; gap: .5rem; }
+.metro-field {
+  display: flex; align-items: center; gap: .5rem;
+  font-family: var(--font-mono); font-size: .625rem; color: var(--sub);
+}
+.metro-field span:first-child { width: 2rem; flex-shrink: 0; letter-spacing: .06em; text-transform: uppercase; }
+.metro-field input[type="range"] {
+  flex: 1; accent-color: var(--acc); height: 2px; cursor: pointer;
+}
+.metro-field select {
+  flex: 1; background: var(--surf2); border: .5px solid var(--border2);
+  border-radius: var(--r-sm); color: var(--text); font-family: var(--font-mono);
+  font-size: .625rem; padding: .25rem .375rem; cursor: pointer;
+}
+.metro-val { font-family: var(--font-mono); font-size: .625rem; color: var(--acc); width: 2.5rem; text-align: right; }
+.metro-btn {
+  display: flex; align-items: center; justify-content: center; gap: .375rem;
+  width: 100%; padding: .5rem;
+  font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .06em;
+  border: .5px solid var(--border2); border-radius: var(--r-sm);
+  background: none; color: var(--text); cursor: pointer;
+  transition: all var(--tx-base);
+}
+.metro-btn:hover  { background: var(--surf2); border-color: var(--acc-ring); color: var(--acc); }
+.metro-stop { background: var(--surf2); border-color: var(--err); color: var(--err); }
+.metro-stop:hover { background: rgba(248,113,113,.1); }
+
+/* ── Chord Selector ── */
+.chord-selector {
+  /* Box styling removed — now rendered inside .glass-panel (PianoQuickBar's
+     popover), which already supplies background/border/padding. */
+  display: flex; flex-direction: column; gap: .75rem;
+}
+.chord-title {
+  display: flex; align-items: center; gap: .375rem;
+  font-family: var(--font-mono); font-size: .625rem;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--purple);
+}
+.chord-roots { display: grid; grid-template-columns: repeat(6, 1fr); gap: .3125rem; }
+.chord-root-btn {
+  font-family: var(--font-mono); font-size: .6875rem;
+  padding: .3125rem 0; border-radius: var(--r-sm);
+  border: .5px solid var(--border2); background: var(--surf2); color: var(--sub);
+  cursor: pointer; transition: all var(--tx-fast);
+}
+.chord-root-btn:hover { color: var(--text); }
+.chord-root-btn.active { color: var(--purple); border-color: rgba(167,139,250,.5); background: rgba(167,139,250,.12); }
+.chord-quality-select {
+  width: 100%; background: var(--surf2); border: .5px solid var(--border2);
+  border-radius: var(--r-sm); color: var(--text); font-family: var(--font-mono);
+  font-size: .6875rem; padding: .4375rem .5rem; cursor: pointer;
+}
+.chord-readout { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.chord-name {
+  font-family: var(--font-mono); font-size: 1rem; font-weight: 700;
+  color: var(--purple); letter-spacing: .02em;
+}
+.chord-octave {
+  display: flex; align-items: center; gap: .375rem;
+  font-family: var(--font-mono); font-size: .625rem; color: var(--sub);
+}
+.chord-oct-btn {
+  width: 1.25rem; height: 1.25rem; display: flex; align-items: center; justify-content: center;
+  border: .5px solid var(--border2); border-radius: var(--r-sm);
+  background: none; color: var(--sub); cursor: pointer; transition: all var(--tx-fast);
+}
+.chord-oct-btn:hover { color: var(--text); border-color: var(--acc-ring); }
+.chord-play-btn {
+  display: flex; align-items: center; justify-content: center; gap: .375rem;
+  width: 100%; padding: .5rem;
+  font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .06em;
+  border: .5px solid rgba(167,139,250,.4); border-radius: var(--r-sm);
+  background: rgba(167,139,250,.1); color: var(--purple); cursor: pointer;
+  transition: all var(--tx-base);
+}
+.chord-play-btn:hover { background: rgba(167,139,250,.18); }

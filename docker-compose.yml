@@ -1,0 +1,89 @@
+networks:
+  leo-net:
+    driver: bridge
+
+services:
+  leo-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Only needs overriding if the API isn't reachable at this default
+        # from wherever the browser loads the page — see Dockerfile.
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:3001}
+    image: leo-app:latest
+    container_name: leo-app
+    ports:
+      - "80:80"
+    depends_on:
+      - leo-server
+    networks:
+      - leo-net
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+
+  leo-server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    image: leo-server:latest
+    container_name: leo-server
+    ports:
+      - "3001:3001"
+    networks:
+      - leo-net
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      # Required — refuses to boot without it. Set in a .env file next to
+      # this compose file (see .env.example) or export it before `docker
+      # compose up`.
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET must be set — see .env.example}
+      # Browsers omit the port from the Origin header when it's the
+      # scheme's default port — a page served on :80 sends "http://localhost",
+      # not "http://localhost:80". Match that, not the URL you'd type in.
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost}
+      - RACE_LOBBY_SIZE=${RACE_LOBBY_SIZE:-4}
+      - MIDI_RACE_LOBBY_SIZE=${MIDI_RACE_LOBBY_SIZE:-2}
+      # Unset by default — JsonDb (the leo-server-data volume below) stays
+      # the storage backend. Set DATABASE_URL to switch to the `postgres`
+      # service below instead (see server/lib/pgDb.js); existing JSON data
+      # is NOT auto-migrated — see server/scripts/migrate-json-to-pg.js to
+      # move it over deliberately before cutting over.
+      - DATABASE_URL=${DATABASE_URL:-}
+    volumes:
+      - leo-server-data:/app/server/data
+
+  # Optional durable-storage backend — not started by a plain `docker
+  # compose up` (profile-gated). Bring it up alongside leo-server with:
+  #   docker compose --profile postgres up -d
+  # then set DATABASE_URL (e.g. in .env) to point leo-server at it — see
+  # the comment on leo-server's environment above.
+  postgres:
+    image: postgres:16-alpine
+    container_name: leo-postgres
+    profiles: ["postgres"]
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-leo}
+      - POSTGRES_USER=${POSTGRES_USER:-leo}
+      # A required (":?") var here would fail `docker compose config`/`up`
+      # for the *whole file* — Compose interpolates every service's env
+      # block up front regardless of which profiles are active — so this
+      # can't hard-require a password the way leo-server's JWT_SECRET does.
+      # Set a real POSTGRES_PASSWORD in .env before running with
+      # --profile postgres; this placeholder only ever reaches a container
+      # that isn't running otherwise.
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme-set-a-real-password-in-env}
+    ports:
+      - "5432:5432"
+    networks:
+      - leo-net
+    volumes:
+      - leo-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  leo-server-data:
+  leo-postgres-data:
