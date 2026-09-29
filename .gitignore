@@ -32,8 +32,6 @@ Thumbs.db
 # Vite cache
 /.vite
 
-# npm package lock
-package-lock.json
 
 # misc
 coverage/
